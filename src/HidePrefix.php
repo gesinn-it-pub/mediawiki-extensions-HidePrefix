@@ -34,12 +34,12 @@ class HidePrefix {
 	 * @param string &$ret
 	 * @return bool
 	 */
-	public static function onHtmlPageLinkRendererBegin(LinkRenderer $linkRenderer, 
+	public static function onHtmlPageLinkRendererBegin( LinkRenderer $linkRenderer, 
 		LinkTarget $target, 
 		&$text, 
 		&$extraAttribs, 
 		&$query, 
-		&$ret) {
+		&$ret ) {
 
 			if ( ! isset( $text ) ) {
 				$text = $target->getText();
