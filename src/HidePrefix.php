@@ -40,18 +40,18 @@ class HidePrefix {
 		&$extraAttribs,
 		&$query,
 		&$ret ) {
-			if ( !isset( $text ) ) {
-				$text = $target->getText();
-				return true;
-			}
+		if ( !isset( $text ) ) {
+			$text = $target->getText();
+			return true;
+		}
 
 			$html = HtmlArmor::getHtml( $text );
 			$title = Title::newFromText( $html );
 			$targetTitle = Title::newFromLinkTarget( $target );
 
-			if ( $title !== null && $targetTitle && $title->getPrefixedText() === $targetTitle->getPrefixedText() ) {
-				$text = $target->getText();
-			}
+		if ( $title !== null && $targetTitle && $title->getPrefixedText() === $targetTitle->getPrefixedText() ) {
+			$text = $target->getText();
+		}
 			return true;
 	}
 
