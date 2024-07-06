@@ -2,8 +2,9 @@
 
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkTarget;
+use PHPUnit\Framework\TestCase;
 
-class HidePrefixTest extends MediaWikiUnitTestCase {
+class HidePrefixTest extends TestCase {
 
 	/**
 	 * @covers HidePrefix::onHtmlPageLinkRendererBegin
