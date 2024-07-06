@@ -11,7 +11,7 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
         $target->expects( $this->any() )
            ->method( 'getText' )
            ->willReturn( 'TargetPage' );
-       
+
         // Simulate input parameters
         $text = null;
         $extraAttribs = [];
@@ -39,12 +39,12 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
         $target->expects( $this->once() )
                ->method( 'getText' )
                ->willReturn( 'TargetPage' );
-    
+
         $text = 'CurrentPage';
         $extraAttribs = [];
         $query = '';
         $ret = '';
-    
+
         $result = HidePrefix::onHtmlPageLinkRendererBegin(
             $linkRenderer,
             $target,
@@ -53,7 +53,7 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
             $query,
             $ret
         );
-    
+
         $this->assertTrue( $result );
         $this->assertNotSame( 'TargetPage', $text );
     }
@@ -64,21 +64,21 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
         $target->expects( $this->any() )
                ->method( 'getText' )
                ->willReturn( 'TargetPage' );
-    
+
         $text = $target->getText();
         $extraAttribs = [];
         $query = '';
         $ret = '';
-    
+
         // Mock Title objects
         $mockTitle = $this->createMock( Title::class );
         $mockTitle->expects( $this->any() )
                   ->method( 'getPrefixedText' )
                   ->willReturn( 'TargetPage' );
-    
+
         $titleFromText = $mockTitle;
         $titleFromLinkTarget = $mockTitle;
-    
+
         $result = HidePrefix::onHtmlPageLinkRendererBegin(
             $linkRenderer,
             $target,
@@ -87,10 +87,10 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
             $query,
             $ret
         );
-    
+
         $this->assertTrue( $result );
         $this->assertSame( $text, $mockTitle->getPrefixedText() );
-    } 
+    }
 
     public function testOnBeforePageDisplay() {
         // Create mock OutputPage and Skin objects

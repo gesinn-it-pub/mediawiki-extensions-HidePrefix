@@ -34,17 +34,17 @@ class HidePrefix {
 	 * @param string &$ret
 	 * @return bool
 	 */
-	public static function onHtmlPageLinkRendererBegin( LinkRenderer $linkRenderer, 
-		LinkTarget $target, 
-		&$text, 
-		&$extraAttribs, 
-		&$query, 
+	public static function onHtmlPageLinkRendererBegin( LinkRenderer $linkRenderer,
+		LinkTarget $target,
+		&$text,
+		&$extraAttribs,
+		&$query,
 		&$ret ) {
 
 			if ( ! isset( $text ) ) {
 				$text = $target->getText();
 				return true;
-			}	
+			}
 
 			$html = HtmlArmor::getHtml( $text );
 			$title = Title::newFromText( $html );
@@ -52,7 +52,7 @@ class HidePrefix {
 
 			if ( $title !== null && $targetTitle && $title->getPrefixedText() === $targetTitle->getPrefixedText() ) {
 				$text = $target->getText();
-			} 
+			}
 			return true;
 	}
 
@@ -70,15 +70,15 @@ class HidePrefix {
 		$title = $out->getTitle();
 		if ( !$title instanceof Title ) {
 			return;
-		} 
-		
+		}
+
 		// result example 'prefix:title', split it to use title
 		$titleWithPrefix = $title->getPrefixedText();
 		$titleWithoutPrefix = explode( ':', $titleWithPrefix );
 
-		// double check $pageTitle from $out -  should contains title of given page 
+		// double check $pageTitle from $out -  should contains title of given page
 		$pageTitle = trim( $out->getPageTitle() );
-		if ( ( $pageTitle === trim( $titleWithoutPrefix[1] ) ) || 
+		if ( ( $pageTitle === trim( $titleWithoutPrefix[1] ) ) ||
 		( strpos( $pageTitle, trim( $titleWithoutPrefix[1] ) ) ) ) {
 			$out->setPageTitle( $title->getText() );
 		}
