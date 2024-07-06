@@ -5,6 +5,9 @@ use MediaWiki\Linker\LinkTarget;
 
 class HidePrefixTest extends MediaWikiUnitTestCase {
 
+	/**
+	 * @covers HidePrefix::onHtmlPageLinkRendererBegin
+	 */
 	public function testOnHtmlPageLinkRendererBeginTextNotSet() {
 		$linkRenderer = $this->createMock( LinkRenderer::class );
 		$target = $this->createMock( LinkTarget::class );
@@ -33,6 +36,9 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'TargetPage', $text );
 	}
 
+	/**
+	 * @covers HidePrefix::onHtmlPageLinkRendererBegin
+	 */
 	public function testOnHtmlPageLinkRendererBeginTextAlreadySet() {
 		$linkRenderer = $this->createMock( LinkRenderer::class );
 		$target = $this->createMock( LinkTarget::class );
@@ -58,6 +64,9 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
 		$this->assertNotSame( 'TargetPage', $text );
 	}
 
+	/**
+	 * @covers HidePrefix::onHtmlPageLinkRendererBegin
+	 */
 	public function testOnHtmlPageLinkRendererBeginTitlesMatch() {
 		$linkRenderer = $this->createMock( LinkRenderer::class );
 		$target = $this->createMock( LinkTarget::class );
@@ -92,6 +101,9 @@ class HidePrefixTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $text, $mockTitle->getPrefixedText() );
 	}
 
+	/**
+	 * @covers HidePrefix::onBeforePageDisplay
+	 */
 	public function testOnBeforePageDisplay() {
 		// Create mock OutputPage and Skin objects
 		$outMock = $this->getMockBuilder( 'OutputPage' )
