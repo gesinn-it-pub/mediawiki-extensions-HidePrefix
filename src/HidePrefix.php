@@ -40,7 +40,6 @@ class HidePrefix {
 		&$extraAttribs,
 		&$query,
 		&$ret ) {
-
 			if ( ! isset( $text ) ) {
 				$text = $target->getText();
 				return true;
