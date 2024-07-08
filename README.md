@@ -1,6 +1,7 @@
-<!-- README -->
-
 # HidePrefix
+
+![ci](https://github.com/gesinn-it-pub/mediawiki-extensions-HidePrefix/actions/workflows/ci.yml/badge.svg)
+[![codecov](https://codecov.io/github/gesinn-it-pub/mediawiki-extensions-HidePrefix/graph/badge.svg?token=pdUWtEQ8rB)](https://codecov.io/github/gesinn-it-pub/mediawiki-extensions-HidePrefix)
 
 The HidePrefix extension hides prefix in links and page titles.
 
@@ -36,5 +37,3 @@ full license text.
 * Extension page: https://www.mediawiki.org/wiki/Extension:HidePrefix
 * Author page:    https://www.mediawiki.org/wiki/User:Van_de_Bugger
 * License page:   https://www.gnu.org/licenses/agpl.html
-
-<!-- end of file -->
