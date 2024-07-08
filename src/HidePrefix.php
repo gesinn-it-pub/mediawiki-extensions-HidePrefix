@@ -34,27 +34,25 @@ class HidePrefix {
 	 * @param string &$ret
 	 * @return bool
 	 */
-	public static function onHtmlPageLinkRendererBegin(
-		LinkRenderer $linkRenderer,
+	public static function onHtmlPageLinkRendererBegin( LinkRenderer $linkRenderer,
 		LinkTarget $target,
 		&$text,
 		&$extraAttribs,
 		&$query,
-		&$ret
-	) {
-		if ( isset( $text ) ) {
-			// Hmm... Sometimes `$text' is not a string but an object of class `Message'...
-			if ( is_string( $text ) ) {
-				$title = Title::newFromText( $text );
-				$targetTitle = Title::newFromLinkTarget( $target );
-				if ( $title !== null && $targetTitle && $title->getPrefixedText() == $targetTitle->getPrefixedText() ) {
-					$text = $target->getText();
-				}
-			}
-		} else {
+		&$ret ) {
+		if ( !isset( $text ) ) {
+			$text = $target->getText();
+			return true;
+		}
+
+			$html = HtmlArmor::getHtml( $text );
+			$title = Title::newFromText( $html );
+			$targetTitle = Title::newFromLinkTarget( $target );
+
+		if ( $title !== null && $targetTitle && $title->getPrefixedText() === $targetTitle->getPrefixedText() ) {
 			$text = $target->getText();
 		}
-		return true;
+			return true;
 	}
 
 	/**
@@ -73,7 +71,14 @@ class HidePrefix {
 			return;
 		}
 
-		if ( $out->getPageTitle() == $title->getPrefixedText() ) {
+		// result example 'prefix:title', split it to use title
+		$titleWithPrefix = $title->getPrefixedText();
+		$titleWithoutPrefix = explode( ':', $titleWithPrefix );
+
+		// double check $pageTitle from $out -  should contains title of given page
+		$pageTitle = trim( $out->getPageTitle() );
+		if ( ( $pageTitle === trim( $titleWithoutPrefix[1] ) ) ||
+		( strpos( $pageTitle, trim( $titleWithoutPrefix[1] ) ) ) ) {
 			$out->setPageTitle( $title->getText() );
 		}
 	}
