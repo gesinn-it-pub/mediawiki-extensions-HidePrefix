@@ -1,7 +1,7 @@
 # HidePrefix
 
 ![ci](https://github.com/gesinn-it-pub/mediawiki-extensions-HidePrefix/actions/workflows/ci.yml/badge.svg)
-[![codecov](https://codecov.io/github/gesinn-it-pub/mediawiki-extensions-HidePrefix/graph/badge.svg?token=pdUWtEQ8rB)](https://codecov.io/github/gesinn-it-pub/mediawiki-extensions-HidePrefix)
+[![codecov](https://codecov.io/github/gesinn-it-pub/mediawiki-extensions-HidePrefix/branch/master/graph/badge.svg?token=pdUWtEQ8rB)](https://codecov.io/github/gesinn-it-pub/mediawiki-extensions-HidePrefix)
 
 The HidePrefix extension hides prefix in links and page titles.
 
