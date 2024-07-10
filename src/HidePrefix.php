@@ -18,6 +18,7 @@
  * ------------------------------------------------------------------------------------------------
  */
 
+use CirrusSearch\Search\ArrayCirrusSearchResult as SearchResults;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkTarget;
 
@@ -80,6 +81,45 @@ class HidePrefix {
 		if ( ( $pageTitle === trim( $titleWithoutPrefix[1] ) ) ||
 		( strpos( $pageTitle, trim( $titleWithoutPrefix[1] ) ) ) ) {
 			$out->setPageTitle( $title->getText() );
+		}
+	}
+
+	/**
+	 * Hide prefix in search results.
+	 *
+	 * @param Title &$title
+	 * @param string &$titleSnippet
+	 * @param SearchResult $result
+	 * @param string $terms
+	 * @param SpecialSearch $specialSearch
+	 * @param array &$query
+	 * @param array &$attributes
+	 */
+	public static function onShowSearchHitTitle( Title &$title,
+		&$titleSnippet,
+		SearchResults $result,
+		$terms,
+		SpecialSearch $specialSearch,
+		array &$query,
+		array &$attributes ) {
+		global $wgHidePrefixInSearchResults;
+
+		if ( $wgHidePrefixInSearchResults ) {
+			$title = $result->getTitle();
+
+			if ( !$title instanceof Title ) {
+				return;
+			}
+
+			// Get the full title with prefix and split it
+			$titleWithPrefix = $title->getPrefixedText();
+			$titleWithoutPrefix = explode( ':', $titleWithPrefix, 2 );
+
+			// Ensure the prefix exists and update the search result title
+			if ( count( $titleWithoutPrefix ) > 1 ) {
+				// Set the new title for the search result
+				$titleSnippet = $titleWithoutPrefix[1];
+			}
 		}
 	}
 }

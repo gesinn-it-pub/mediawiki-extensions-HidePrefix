@@ -21,7 +21,11 @@
 	},
 	"Hooks": {
 		"HtmlPageLinkRendererBegin": "HidePrefix::onHtmlPageLinkRendererBegin",
-		"BeforePageDisplay": "HidePrefix::onBeforePageDisplay"
+		"BeforePageDisplay": "HidePrefix::onBeforePageDisplay",
+		"ShowSearchHitTitle": "HidePrefix::onShowSearchHitTitle"
 	},
-	"manifest_version": 2
+	"config": {
+		"HidePrefixInSearchResults": false
+	},
+	"manifest_version": 1
 }
