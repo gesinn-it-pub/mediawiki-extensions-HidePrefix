@@ -127,14 +127,56 @@ class HidePrefixTest extends TestCase {
 
 		$outMock->expects( $this->any() )
 				->method( 'getTitle' )
-				->willReturn( $pageTitleWithPrefix );
+				->willReturn( $titleMock );
+
+		$title = $outMock->getTitle();
 
 		$outMock->expects( $this->any() )
 				->method( 'getPageTitle' )
-				->willReturn( $pageTitleWithoutPrefix );
+				->willReturn( $pageTitleWithPrefix );
 
-		// Assert that setPageTitle was called with the correct argument
-		$this->assertSame( $pageTitleWithoutPrefix, $outMock->getPageTitle() );
-		$this->assertStringContainsString( $outMock->getPageTitle(), $outMock->getTitle() );
+		// Assert that pageTitle is with prefix
+		$this->assertSame( $title->getPrefixedText(), $outMock->getPageTitle() );
+
+		$outMock->expects( $this->any() )
+				->method( 'setPageTitle' )
+				->willReturn( $pageTitleWithoutPrefix );
+		$pageTitle = $outMock->setPageTitle( $pageTitleWithoutPrefix );
+
+		// Get the full title with prefix and split it
+		$titleWithPrefix = $title->getPrefixedText();
+		$titleWithoutPrefix = explode( ':', $titleWithPrefix, 2 );
+
+		// Assert that pageTitle is without prefix
+		$this->assertSame( $titleWithoutPrefix[1], $pageTitle );
+	}
+
+	/**
+	 * @covers HidePrefix::onBeforePageDisplay
+	 */
+	public function testOnBeforePageDisplayWhenTitleIsMissing() {
+		// Create necessary mocks or stubs
+		$outMock = $this->getMockBuilder( 'OutputPage' )
+						->disableOriginalConstructor()
+						->getMock();
+		$skMock = $this->createMock( 'Skin' );
+
+		// Mock getTitle() to return a mock of Title with a specific behavior
+		$titleMock = $this->createMock( 'Title' );
+		$outMock->expects( $this->once() )
+				->method( 'getTitle' )
+				->willReturn( $titleMock );
+
+		$title = $outMock->getTitle();
+
+		// Mock getPageTitle() to return an empty string or null
+		$outMock->expects( $this->once() )
+				->method( 'getPageTitle' )
+				->willReturn( null );
+
+		// Call the method under test
+		HidePrefix::onBeforePageDisplay( $outMock, $skMock );
+
+		$this->assertSame( $title->getPrefixedText(), $outMock->getPageTitle() );
 	}
 }
