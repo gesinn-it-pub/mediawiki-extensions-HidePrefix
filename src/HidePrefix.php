@@ -74,12 +74,18 @@ class HidePrefix {
 
 		// result example 'prefix:title', split it to use title
 		$titleWithPrefix = $title->getPrefixedText();
-		$titleWithoutPrefix = explode( ':', $titleWithPrefix );
+		$titleParts = explode( ':', $titleWithPrefix );
 
-		// double check $pageTitle from $out -  should contains title of given page
+		// double check $pageTitle from $out - should contain title of given page
 		$pageTitle = trim( $out->getPageTitle() );
-		if ( ( $pageTitle === trim( $titleWithoutPrefix[1] ) ) ||
-		( strpos( $pageTitle, trim( $titleWithoutPrefix[1] ) ) ) ) {
+		if ( count( $titleParts ) > 1 ) {
+			$titleWithoutPrefix = trim( $titleParts[1] );
+		} else {
+			$titleWithoutPrefix = trim( $titleParts[0] );
+		}
+
+		if ( ( $pageTitle === $titleWithoutPrefix ) ||
+		( strpos( $pageTitle, $titleWithoutPrefix ) ) ) {
 			$out->setPageTitle( $title->getText() );
 		}
 	}

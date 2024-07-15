@@ -105,55 +105,6 @@ class HidePrefixTest extends TestCase {
 	/**
 	 * @covers HidePrefix::onBeforePageDisplay
 	 */
-	public function testOnBeforePageDisplay() {
-		// Create mock OutputPage and Skin objects
-		$outMock = $this->getMockBuilder( 'OutputPage' )
-						->disableOriginalConstructor()
-						->getMock();
-
-		// Create mock Skin object
-		$skMock = $this->getMockBuilder( 'Skin' )
-					   ->disableOriginalConstructor()
-					   ->getMock();
-
-		// Example page title with prefix
-		$pageTitleWithPrefix = 'Prefix:Example_Title';
-		$pageTitleWithoutPrefix = 'Example_Title';
-
-		// Create a mock Title object
-		$titleMock = $this->createMock( Title::class );
-		$titleMock->method( 'getPrefixedText' )->willReturn( $pageTitleWithPrefix );
-		$titleMock->method( 'getText' )->willReturn( $pageTitleWithoutPrefix );
-
-		$outMock->expects( $this->any() )
-				->method( 'getTitle' )
-				->willReturn( $titleMock );
-
-		$title = $outMock->getTitle();
-
-		$outMock->expects( $this->any() )
-				->method( 'getPageTitle' )
-				->willReturn( $pageTitleWithPrefix );
-
-		// Assert that pageTitle is with prefix
-		$this->assertSame( $title->getPrefixedText(), $outMock->getPageTitle() );
-
-		$outMock->expects( $this->any() )
-				->method( 'setPageTitle' )
-				->willReturn( $pageTitleWithoutPrefix );
-		$pageTitle = $outMock->setPageTitle( $pageTitleWithoutPrefix );
-
-		// Get the full title with prefix and split it
-		$titleWithPrefix = $title->getPrefixedText();
-		$titleWithoutPrefix = explode( ':', $titleWithPrefix, 2 );
-
-		// Assert that pageTitle is without prefix
-		$this->assertSame( $titleWithoutPrefix[1], $pageTitle );
-	}
-
-	/**
-	 * @covers HidePrefix::onBeforePageDisplay
-	 */
 	public function testOnBeforePageDisplayWhenTitleIsMissing() {
 		// Create necessary mocks or stubs
 		$outMock = $this->getMockBuilder( 'OutputPage' )
@@ -178,5 +129,40 @@ class HidePrefixTest extends TestCase {
 		HidePrefix::onBeforePageDisplay( $outMock, $skMock );
 
 		$this->assertSame( $title->getPrefixedText(), $outMock->getPageTitle() );
+	}
+
+	public function newHooksInstance() {
+		return new Hooks(
+			$this->getServiceContainer()->getMainConfig(),
+			$this->getServiceContainer()->getSpecialPageFactory(),
+			$this->getServiceContainer()->getUserOptionsLookup(),
+			null
+		);
+	}
+
+	public static function provideOnBeforePageDisplay() {
+		return [
+			'no prefix' => [ 'Main Page', 'Main Page', 'Main Page' ],
+			'with prefix' => [ 'Category:Main Page', 'Main Page', 'Main Page' ],
+			'special with prefix' => [ 'Special:ListFiles', 'ListFiles', 'ListFiles' ],
+			'special no prefix' => [ 'Special:Watchlist', 'Watchlist', 'Watchlist' ],
+		];
+	}
+
+	/**
+	 * @dataProvider provideOnBeforePageDisplay
+	 * @covers HidePrefix::onBeforePageDisplay
+	 */
+	public function testOnBeforePageDisplay( $pagename, $expectedTitle, $pageTitle ) {
+		$t = Title::newFromText( $pagename );
+		$t->setContentModel( CONTENT_MODEL_WIKITEXT );
+		$skin = new SkinTemplate();
+		$output = $this->createMock( OutputPage::class );
+		$output->method( 'getTitle' )->willReturn( $t );
+		$output->method( 'isArticle' )->willReturn( true );
+		$output->method( 'getPageTitle' )->willReturn( $pageTitle );
+		$output->expects( $this->once() )->method( 'setPageTitle' )->with( $expectedTitle );
+
+		HidePrefix::onBeforePageDisplay( $output, $skin );
 	}
 }
